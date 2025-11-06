@@ -1,16 +1,22 @@
 {
   "name": "iLogger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "iLogger (Interactive Logger), in-browser logger with persistent session storage and downloadable logs",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs --clean",
     "prepublishOnly": "npm run build"

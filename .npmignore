@@ -1,0 +1,37 @@
+# Source files
+src/
+tsconfig.json
+
+# Development files
+demo/
+*.log
+
+# Build artifacts (will be included via package.json files field)
+# dist/ is intentionally NOT ignored - it contains the published code
+
+# Development dependencies
+node_modules/
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files (if you add tests later)
+test/
+tests/
+__tests__/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
