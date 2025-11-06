@@ -19,16 +19,16 @@
 ## Installation
 
 ```bash
-npm install iLogger
+npm install interactive-logger
 ```
 
 ## Quick Start
 
 ```javascript
-import { ILogger, getLogger } from 'iLogger';
+import { InteractiveLogger, getLogger } from 'interactive-logger';
 
 // Initialize iLogger with options
-const logger = ILogger({
+const logger = InteractiveLogger({
   maxLogs: 5000,      // Maximum number of logs to store (default: 5000)
   singleFile: false,  // Download as single file or ZIP (default: false)
   timestamps: true,   // Include timestamps in logs (default: true)
@@ -51,12 +51,12 @@ logger.injectButton();
 
 ## API Reference
 
-### ILogger Constructor Options
+### InteractiveLogger Constructor Options
 
-The `ILogger()` function accepts an optional configuration object:
+The `InteractiveLogger()` function accepts an optional configuration object:
 
 ```typescript
-ILogger(options?: {
+InteractiveLogger(options?: {
   maxLogs?: number;      // Maximum number of logs to store (default: 5000)
   singleFile?: boolean;  // Download logs as single file vs ZIP (default: false)
   timestamps?: boolean;  // Include timestamps in logs (default: true)
@@ -309,7 +309,7 @@ interface ButtonStyleOptions {
 
 ```javascript
 // Customize via constructor
-const logger = ILogger({
+const logger = InteractiveLogger({
   buttonOptions: {
     text: "Export Logs",
     style: {
@@ -587,10 +587,10 @@ Each file contains logs from that specific logger instance, with timestamps if e
 ## Complete Example
 
 ```javascript
-import { ILogger, getLogger } from 'iLogger';
+import { InteractiveLogger, getLogger } from 'interactive-logger';
 
 // Initialize with custom options
-const logger = ILogger({
+const logger = InteractiveLogger({
   maxLogs: 10000,
   singleFile: false,
   timestamps: true,

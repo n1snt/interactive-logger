@@ -9,7 +9,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "iLogger": "file:..",
+        "interactive-logger": "file:..",
         "lz-string": "^1.5.0"
     },
     "devDependencies": {

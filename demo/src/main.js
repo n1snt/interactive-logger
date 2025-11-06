@@ -1,7 +1,7 @@
-import { ILogger, getLogger } from "iLogger";
+import { InteractiveLogger, getLogger } from "interactive-logger";
 
 // Initialize iLogger
-const logger = ILogger({ maxLogs: 500 });
+const logger = InteractiveLogger({ maxLogs: 500 });
 // Don't auto-inject button - let user control it via UI
 logger.injectButton();
 // Enable console interface

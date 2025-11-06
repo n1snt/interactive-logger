@@ -2,7 +2,7 @@ import { LoggerInstance } from "./loggerInstance";
 import { StorageAdapter } from "./storageAdapter";
 import { downloadLogs, injectDownloadButton, withdrawDownloadButton, type ButtonOptions } from "./uiButton";
 
-class ILoggerCore {
+class InteractiveLoggerCore {
   private instances: Record<string, LoggerInstance> = {};
   private storage: StorageAdapter;
   private consoleLogging = false;
@@ -273,10 +273,10 @@ class ILoggerCore {
   }
 }
 
-let _illogger: ILoggerCore | null = null;
+let _illogger: InteractiveLoggerCore | null = null;
 
-export function ILogger(options?: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string; buttonOptions?: ButtonOptions }) {
-  if (!_illogger) _illogger = new ILoggerCore(options);
+export function InteractiveLogger(options?: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string; buttonOptions?: ButtonOptions }) {
+  if (!_illogger) _illogger = new InteractiveLoggerCore(options);
   return _illogger;
 }
 
