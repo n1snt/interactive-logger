@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iLogger Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+
+        .control-group h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        button.secondary:hover {
+            background: #5a6268;
+        }
+
+        button.danger {
+            background: #dc3545;
+        }
+
+        button.danger:hover {
+            background: #c82333;
+        }
+
+        button.success {
+            background: #28a745;
+        }
+
+        button.success:hover {
+            background: #218838;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .info p {
+            color: #0d47a1;
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 iLogger Demo</h1>
+        <p class="subtitle">Interactive Logger with Persistent Session Storage</p>
+
+        <div class="info">
+            <p><strong>💡 Tip:</strong> All logs are stored in sessionStorage and persist across page reloads.</p>
+            <p><strong>📥 Download:</strong> Click the "⬇️ Logs" button in the bottom-right corner to download all logs
+                as a ZIP file.</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>📝 Basic Logging</h3>
+                <button onclick="logInfo()">Log Info Message</button>
+                <button onclick="logWarning()">Log Warning</button>
+                <button onclick="logError()">Log Error</button>
+                <button onclick="logObject()">Log Object</button>
+                <button onclick="logArray()">Log Array</button>
+            </div>
+
+            <div class="control-group">
+                <h3>🎯 Multiple Loggers</h3>
+                <div class="input-group">
+                    <label>Logger Name:</label>
+                    <select id="loggerSelect">
+                        <option value="app">app</option>
+                        <option value="api">api</option>
+                        <option value="ui">ui</option>
+                        <option value="auth">auth</option>
+                    </select>
+                </div>
+                <button onclick="logWithSelected()">Log with Selected Logger</button>
+                <button onclick="logToAll()">Log to All Loggers</button>
+            </div>
+
+            <div class="control-group">
+                <h3>⚙️ Configuration</h3>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consoleLogging" onchange="toggleConsoleLogging()">
+                    <label for="consoleLogging">Enable Console Logging</label>
+                </div>
+                <button onclick="clearLogs()" class="danger">Clear All Logs</button>
+                <button onclick="simulateErrors()" class="danger">Simulate Errors</button>
+            </div>
+
+            <div class="control-group">
+                <h3>🔄 Simulate Activity</h3>
+                <button onclick="simulateAPI()" class="success">Simulate API Calls</button>
+                <button onclick="simulateUserActions()" class="success">Simulate User Actions</button>
+                <button onclick="simulateWorkflow()" class="success">Simulate Full Workflow</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h4>Total Logs</h4>
+                <div class="value" id="totalLogs">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Active Loggers</h4>
+                <div class="value" id="activeLoggers">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Session Duration</h4>
+                <div class="value" id="sessionDuration">0s</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

@@ -22,6 +22,7 @@ export function injectDownloadButton(storage: StorageAdapter) {
     cursor: "pointer",
     zIndex: "99999",
     opacity: "0.8",
+    width: "80px",
   });
 
   btn.onmouseenter = () => (btn.style.opacity = "1");
