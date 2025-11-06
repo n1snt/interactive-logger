@@ -18,6 +18,13 @@ export async function downloadLogs(
     // Create a single log file with all logs
     const content = logs
       .map((log: any) => {
+        // Handle session separator entries
+        if (log.isSeparator || log.name === "__session_separator__") {
+          const timestamp = shouldShowTimestamps && log.timestamp ? `[${log.timestamp}] ` : '';
+          const separatorLine = "=".repeat(60);
+          return `\n${separatorLine}\n${timestamp}${log.message}\n${separatorLine}\n`;
+        }
+
         const loggerPrefix = log.name ? `[${log.name}] ` : '';
         const timestamp = shouldShowTimestamps && log.timestamp ? `[${log.timestamp}] ` : '';
         return `${timestamp}${loggerPrefix}${log.message}`;
@@ -27,14 +34,32 @@ export async function downloadLogs(
     saveAs(blob, "illogger-logs.log");
   } else {
     // Create multiple files grouped by logger name (original behavior)
-    const grouped = logs.reduce((acc: any, log: any) => {
-      (acc[log.name] ||= []).push(log);
-      return acc;
-    }, {});
+    // Maintain chronological order: separators appear in all files at their chronological position
+    const grouped: Record<string, any[]> = {};
+
+    logs.forEach((log: any) => {
+      if (log.isSeparator || log.name === "__session_separator__") {
+        // Add separator to all existing groups to maintain chronological order
+        Object.keys(grouped).forEach((key) => {
+          grouped[key].push(log);
+        });
+      } else {
+        // Add regular log to its group
+        (grouped[log.name] ||= []).push(log);
+      }
+    });
+
     const zip = new JSZip();
     Object.entries(grouped).forEach(([name, entries]: any) => {
       const content = entries
         .map((e: any) => {
+          // Handle session separator entries
+          if (e.isSeparator || e.name === "__session_separator__") {
+            const timestamp = shouldShowTimestamps && e.timestamp ? `[${e.timestamp}] ` : '';
+            const separatorLine = "=".repeat(60);
+            return `\n${separatorLine}\n${timestamp}${e.message}\n${separatorLine}\n`;
+          }
+
           const timestamp = shouldShowTimestamps && e.timestamp ? `[${e.timestamp}] ` : '';
           return `${timestamp}${e.message}`;
         })

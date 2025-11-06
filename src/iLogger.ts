@@ -10,6 +10,8 @@ class ILoggerCore {
   private timestampsEnabled = true;
   private enabled = true;
   private consoleInterceptionEnabled = false;
+  private sessionSeparatorEnabled = true;
+  private sessionSeparatorMessage: string | undefined;
   private originalConsoleMethods: {
     log?: typeof console.log;
     error?: typeof console.error;
@@ -19,11 +21,18 @@ class ILoggerCore {
     trace?: typeof console.trace;
   } = {};
 
-  constructor(options: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean } = {}) {
+  constructor(options: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string } = {}) {
     this.storage = new StorageAdapter("__illogger__", options.maxLogs ?? 5000);
     this.singleFile = options.singleFile ?? false;
     this.timestampsEnabled = options.timestamps ?? true;
     this.enabled = options.enabled ?? true;
+    this.sessionSeparatorEnabled = options.sessionSeparator ?? true;
+    this.sessionSeparatorMessage = options.sessionSeparatorMessage;
+
+    // Check if this is a new session and add separator if enabled
+    if (this.sessionSeparatorEnabled && this.enabled && typeof window !== "undefined" && typeof sessionStorage !== "undefined") {
+      this.checkAndAddSessionSeparator();
+    }
   }
 
   createInstance(name: string, options: { timeStamps?: boolean } = {}) {
@@ -221,11 +230,48 @@ class ILoggerCore {
   isConsoleInterceptionEnabled(): boolean {
     return this.consoleInterceptionEnabled;
   }
+
+  /**
+   * Check if this is a new session and add separator if needed
+   * Uses sessionStorage to track if this tab has already been initialized
+   */
+  private checkAndAddSessionSeparator(): void {
+    const SESSION_MARKER_KEY = "__illogger_session_initialized__";
+
+    // Check if this session has already been initialized
+    if (sessionStorage.getItem(SESSION_MARKER_KEY)) {
+      return; // Already initialized, skip separator
+    }
+
+    // Mark this session as initialized
+    try {
+      sessionStorage.setItem(SESSION_MARKER_KEY, "true");
+    } catch (e) {
+      // If sessionStorage is not available or quota exceeded, skip
+      return;
+    }
+
+    // Add session separator log entry
+    const timestamp = this.timestampsEnabled ? new Date().toISOString() : undefined;
+    const message = this.sessionSeparatorMessage || "New Session";
+
+    const separatorEntry = {
+      name: "__session_separator__",
+      message,
+      timestamp,
+      isSeparator: true, // Flag to identify separator entries
+    };
+
+    // Fire and forget - don't block on storage write
+    this.storage.append(separatorEntry).catch((error) => {
+      // Silently fail - don't log to console to avoid recursion
+    });
+  }
 }
 
 let _illogger: ILoggerCore | null = null;
 
-export function ILogger(options?: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean }) {
+export function ILogger(options?: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string }) {
   if (!_illogger) _illogger = new ILoggerCore(options);
   return _illogger;
 }
