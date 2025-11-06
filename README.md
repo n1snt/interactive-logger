@@ -8,6 +8,7 @@
 - **Multiple Logger Instances**: Create separate loggers for different parts of your application
 - **Timestamps**: Optional timestamp support for all log entries
 - **Download Logs**: Download logs as a single file or grouped by logger (ZIP)
+- **Programmatic Download**: Trigger log downloads programmatically or from console
 - **UI Button**: Floating, draggable download button for easy log access
 - **Performance Optimized**: Batched writes to IndexedDB for high-frequency logging
 - **Auto-trimming**: Automatically maintains maximum log limit by removing oldest entries
@@ -172,6 +173,29 @@ if (!isEnabled) {
 }
 ```
 
+### Download Methods
+
+#### `downloadLogs(): Promise<void>`
+
+Programmatically trigger a log download. This method respects the current `singleFile` and `timestamps` settings and will download logs in the same format as the UI button.
+
+**Returns:** `Promise<void>` that resolves when the download is initiated
+
+**Example:**
+```javascript
+// Trigger download programmatically
+await logger.downloadLogs();
+
+// In an event handler
+button.addEventListener('click', async () => {
+  await logger.downloadLogs();
+});
+```
+
+**Note:** The download format depends on your `singleFile` setting:
+- If `singleFile: true`, downloads a single `.log` file
+- If `singleFile: false`, downloads a `.zip` file with separate files per logger
+
 ### Download Button Methods
 
 #### `injectButton(): void`
@@ -196,6 +220,32 @@ Removes the download button from the page and cleans up all event listeners.
 **Example:**
 ```javascript
 logger.withdrawButton(); // Remove download button
+```
+
+### Console Interface Methods
+
+#### `enableConsoleInterface(): void`
+
+Exposes the `downloadLogs()` function on the `window` object, allowing you to trigger downloads directly from the browser console.
+
+**Example:**
+```javascript
+logger.enableConsoleInterface();
+
+// Then in browser console:
+downloadLogs()  // Triggers the download
+```
+
+**Note:** This only works in browser environments. The function is exposed as `window.downloadLogs`.
+
+#### `disableConsoleInterface(): void`
+
+Removes the `downloadLogs()` function from the `window` object.
+
+**Example:**
+```javascript
+logger.disableConsoleInterface();
+// downloadLogs() is no longer available in console
 ```
 
 ### Storage Management Methods
@@ -418,6 +468,13 @@ console.log(`Total logs: ${stats.totalLogs}`);
 
 // Inject download button
 logger.injectButton();
+
+// Enable console interface for easy access
+logger.enableConsoleInterface();
+// Now you can type 'downloadLogs()' in the browser console
+
+// Or trigger download programmatically
+await logger.downloadLogs();
 
 // Later: disable logging temporarily
 logger.setEnabled(false);
