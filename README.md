@@ -14,6 +14,7 @@
 - **Auto-trimming**: Automatically maintains maximum log limit by removing oldest entries
 - **Runtime Configuration**: Enable/disable logging, timestamps, and console output at runtime
 - **Console Interception**: Capture all console output (console.log, console.error, etc.) and write to log files
+- **Session Separators**: Automatically add visual separators to mark new browser sessions/tabs in log files
 
 ## Installation
 
@@ -31,7 +32,9 @@ const logger = ILogger({
   maxLogs: 5000,      // Maximum number of logs to store (default: 5000)
   singleFile: false,  // Download as single file or ZIP (default: false)
   timestamps: true,   // Include timestamps in logs (default: true)
-  enabled: true       // Enable/disable logging (default: true)
+  enabled: true,      // Enable/disable logging (default: true)
+  sessionSeparator: true,  // Add session separators for new tabs (default: true)
+  sessionSeparatorMessage: "New Session"  // Custom separator message (optional)
 });
 
 // Create logger instances
@@ -58,6 +61,8 @@ ILogger(options?: {
   singleFile?: boolean;  // Download logs as single file vs ZIP (default: false)
   timestamps?: boolean;  // Include timestamps in logs (default: true)
   enabled?: boolean;     // Enable/disable logging globally (default: true)
+  sessionSeparator?: boolean;  // Add session separators for new tabs (default: true)
+  sessionSeparatorMessage?: string;  // Custom message for session separators (optional)
 })
 ```
 
@@ -69,6 +74,8 @@ ILogger(options?: {
   - `true`: Download all logs as a single `.log` file
 - **`timestamps`** (boolean, default: `true`): Whether to include ISO timestamps in log entries
 - **`enabled`** (boolean, default: `true`): Global enable/disable flag for all logging operations
+- **`sessionSeparator`** (boolean, default: `true`): Whether to automatically add session separators when a new browser tab/window is opened. Session separators help distinguish between different browser sessions in your log files.
+- **`sessionSeparatorMessage`** (string, optional): Custom message to display in session separators. If not provided, defaults to `"New Session"`. The separator will include a timestamp if timestamps are enabled.
 
 ### Core Methods
 
@@ -457,10 +464,16 @@ Each log entry stored in IndexedDB has the following structure:
 When `singleFile` is `true`, all logs are downloaded as a single `.log` file:
 
 ```
+============================================================
+[2024-01-15T10:30:00.000Z] New Session
+============================================================
+
 [2024-01-15T10:30:00.000Z] [app] Application started
 [2024-01-15T10:30:01.000Z] [api] GET /api/users - Status: 200
 [2024-01-15T10:30:02.000Z] [app] User logged in
 ```
+
+Session separators (if enabled) appear with visual formatting to clearly mark the start of a new browser session/tab.
 
 ### Multi-File Mode (`singleFile: false`, default)
 
@@ -475,7 +488,9 @@ illogger-logs.zip
 └── __console__.log  (if console interception is enabled)
 ```
 
-Each file contains logs from that specific logger instance, with timestamps if enabled. If console interception is enabled, all captured console output will be in the `__console__.log` file with log level prefixes (e.g., `[LOG]`, `[ERROR]`, `[WARN]`).
+Each file contains logs from that specific logger instance, with timestamps if enabled. Session separators (if enabled) appear in all log files at their chronological positions to mark when a new browser session/tab was opened. If console interception is enabled, all captured console output will be in the `__console__.log` file with log level prefixes (e.g., `[LOG]`, `[ERROR]`, `[WARN]`).
+
+**Note:** Session separators do not appear in console output, only in stored logs and downloaded files.
 
 ## Complete Example
 
@@ -487,7 +502,9 @@ const logger = ILogger({
   maxLogs: 10000,
   singleFile: false,
   timestamps: true,
-  enabled: true
+  enabled: true,
+  sessionSeparator: true,  // Enable session separators (default)
+  sessionSeparatorMessage: "🔄 New Session Started"  // Custom separator message
 });
 
 // Create multiple logger instances
