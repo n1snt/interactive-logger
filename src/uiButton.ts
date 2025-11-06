@@ -1,5 +1,5 @@
-import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import JSZip from "jszip";
 import type { StorageAdapter } from "./storageAdapter";
 
 export function injectDownloadButton(storage: StorageAdapter) {
@@ -29,7 +29,7 @@ export function injectDownloadButton(storage: StorageAdapter) {
   btn.onmouseleave = () => (btn.style.opacity = "0.8");
 
   btn.onclick = async () => {
-    const logs = storage.getAll();
+    const logs = await storage.getAll();
     const grouped = logs.reduce((acc: any, log: any) => {
       (acc[log.name] ||= []).push(log);
       return acc;

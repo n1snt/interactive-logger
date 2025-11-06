@@ -6,7 +6,7 @@ export class LoggerInstance {
     private storage: StorageAdapter,
     private withTimestamps = true,
     private consoleLogging = false,
-  ) {}
+  ) { }
 
   writeLog(...args: any[]) {
     const message = args
@@ -25,7 +25,10 @@ export class LoggerInstance {
       timestamp: this.withTimestamps ? new Date().toISOString() : undefined,
     };
 
-    this.storage.append(entry);
+    // Fire and forget - don't block on storage write
+    this.storage.append(entry).catch((error) => {
+      console.error("Failed to write log to storage:", error);
+    });
     if (this.consoleLogging) console.log(`[${this.name}]`, ...args);
   }
 

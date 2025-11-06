@@ -1,5 +1,4 @@
 import { ILogger, getLogger } from "iLogger";
-import LZString from "lz-string";
 
 // Initialize iLogger
 const logger = ILogger();
@@ -23,40 +22,11 @@ window.loggers = {
 const sessionStart = Date.now();
 
 // Update stats periodically
-function updateStats() {
+async function updateStats() {
     try {
-        const raw = sessionStorage.getItem("__illogger__");
-        if (!raw) {
-            document.getElementById("totalLogs").textContent = "0";
-            document.getElementById("activeLoggers").textContent = "0";
-            return;
-        }
-
-        // Try to decompress (storage adapter uses LZ-String compression)
-        let logs = [];
-        try {
-            const decompressed = LZString.decompressFromUTF16(raw);
-            if (decompressed) {
-                logs = JSON.parse(decompressed);
-            } else {
-                // Fallback: try parsing as plain JSON
-                logs = JSON.parse(raw);
-            }
-        } catch (e) {
-            // If decompression fails, try plain JSON
-            try {
-                logs = JSON.parse(raw);
-            } catch (e2) {
-                logs = [];
-            }
-        }
-
-        // Count unique loggers
-        const uniqueLoggers = new Set(logs.map((log) => log?.name).filter(Boolean));
-
-        document.getElementById("totalLogs").textContent = logs.length || 0;
-        document.getElementById("activeLoggers").textContent =
-            uniqueLoggers.size || 0;
+        const stats = await logger.getStats();
+        document.getElementById("totalLogs").textContent = stats.totalLogs || 0;
+        document.getElementById("activeLoggers").textContent = stats.activeLoggers || 0;
 
         const duration = Math.floor((Date.now() - sessionStart) / 1000);
         document.getElementById("sessionDuration").textContent = `${duration}s`;
@@ -134,9 +104,9 @@ window.toggleConsoleLogging = () => {
     updateStats();
 };
 
-window.clearLogs = () => {
+window.clearLogs = async () => {
     if (confirm("Are you sure you want to clear all logs?")) {
-        logger.clear();
+        await logger.clear();
         appLogger.writeLog("🗑️ All logs cleared");
         updateStats();
     }

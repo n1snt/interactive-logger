@@ -31,8 +31,17 @@ class ILoggerCore {
     injectDownloadButton(this.storage);
   }
 
-  clear() {
-    this.storage.clear();
+  async clear() {
+    await this.storage.clear();
+  }
+
+  async getStats() {
+    const logs = await this.storage.getAll();
+    const uniqueLoggers = new Set(logs.map((log) => log?.name).filter(Boolean));
+    return {
+      totalLogs: logs.length,
+      activeLoggers: uniqueLoggers.size,
+    };
   }
 }
 
