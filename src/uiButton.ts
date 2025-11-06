@@ -2,6 +2,50 @@ import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import type { StorageAdapter } from "./storageAdapter";
 
+/**
+ * Download logs from storage
+ * Can be called programmatically or from the UI button
+ */
+export async function downloadLogs(
+  storage: StorageAdapter,
+  singleFile: boolean,
+  showTimestamps: boolean | (() => boolean)
+) {
+  const logs = await storage.getAll();
+  const shouldShowTimestamps = typeof showTimestamps === "function" ? showTimestamps() : showTimestamps;
+
+  if (singleFile) {
+    // Create a single log file with all logs
+    const content = logs
+      .map((log: any) => {
+        const loggerPrefix = log.name ? `[${log.name}] ` : '';
+        const timestamp = shouldShowTimestamps && log.timestamp ? `[${log.timestamp}] ` : '';
+        return `${timestamp}${loggerPrefix}${log.message}`;
+      })
+      .join("\n");
+    const blob = new Blob([content], { type: "text/plain" });
+    saveAs(blob, "illogger-logs.log");
+  } else {
+    // Create multiple files grouped by logger name (original behavior)
+    const grouped = logs.reduce((acc: any, log: any) => {
+      (acc[log.name] ||= []).push(log);
+      return acc;
+    }, {});
+    const zip = new JSZip();
+    Object.entries(grouped).forEach(([name, entries]: any) => {
+      const content = entries
+        .map((e: any) => {
+          const timestamp = shouldShowTimestamps && e.timestamp ? `[${e.timestamp}] ` : '';
+          return `${timestamp}${e.message}`;
+        })
+        .join("\n");
+      zip.file(`${name}.log`, content);
+    });
+    const blob = await zip.generateAsync({ type: "blob" });
+    saveAs(blob, "illogger-logs.zip");
+  }
+}
+
 const POSITION_STORAGE_KEY = "illogger-button-position";
 
 function getSavedPosition(): { top: number; left: number } | null {
@@ -210,39 +254,7 @@ export function injectDownloadButton(
       return;
     }
 
-    const logs = await storage.getAll();
-    const shouldShowTimestamps = getShowTimestamps();
-
-    if (singleFile) {
-      // Create a single log file with all logs
-      const content = logs
-        .map((log: any) => {
-          const loggerPrefix = log.name ? `[${log.name}] ` : '';
-          const timestamp = shouldShowTimestamps && log.timestamp ? `[${log.timestamp}] ` : '';
-          return `${timestamp}${loggerPrefix}${log.message}`;
-        })
-        .join("\n");
-      const blob = new Blob([content], { type: "text/plain" });
-      saveAs(blob, "illogger-logs.log");
-    } else {
-      // Create multiple files grouped by logger name (original behavior)
-      const grouped = logs.reduce((acc: any, log: any) => {
-        (acc[log.name] ||= []).push(log);
-        return acc;
-      }, {});
-      const zip = new JSZip();
-      Object.entries(grouped).forEach(([name, entries]: any) => {
-        const content = entries
-          .map((e: any) => {
-            const timestamp = shouldShowTimestamps && e.timestamp ? `[${e.timestamp}] ` : '';
-            return `${timestamp}${e.message}`;
-          })
-          .join("\n");
-        zip.file(`${name}.log`, content);
-      });
-      const blob = await zip.generateAsync({ type: "blob" });
-      saveAs(blob, "illogger-logs.zip");
-    }
+    await downloadLogs(storage, singleFile, getShowTimestamps);
   };
 
   btn.addEventListener("click", handleClick);

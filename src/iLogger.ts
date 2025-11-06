@@ -1,6 +1,6 @@
 import { LoggerInstance } from "./loggerInstance";
 import { StorageAdapter } from "./storageAdapter";
-import { injectDownloadButton, withdrawDownloadButton } from "./uiButton";
+import { downloadLogs, injectDownloadButton, withdrawDownloadButton } from "./uiButton";
 
 class ILoggerCore {
   private instances: Record<string, LoggerInstance> = {};
@@ -84,6 +84,22 @@ class ILoggerCore {
 
   getMaxLogs(): number {
     return this.storage.getMaxLogs();
+  }
+
+  async downloadLogs() {
+    await downloadLogs(this.storage, this.singleFile, () => this.timestampsEnabled);
+  }
+
+  enableConsoleInterface() {
+    if (typeof window !== "undefined") {
+      (window as any).downloadLogs = () => this.downloadLogs();
+    }
+  }
+
+  disableConsoleInterface() {
+    if (typeof window !== "undefined") {
+      delete (window as any).downloadLogs;
+    }
   }
 }
 

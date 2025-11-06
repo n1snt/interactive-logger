@@ -2,8 +2,10 @@ import { ILogger, getLogger } from "iLogger";
 
 // Initialize iLogger
 const logger = ILogger({ maxLogs: 500 });
-logger.injectButton();
 // Don't auto-inject button - let user control it via UI
+logger.injectButton();
+// Enable console interface
+logger.enableConsoleInterface();
 
 // Create multiple logger instances
 const appLogger = logger.createInstance("app", { timeStamps: true });
