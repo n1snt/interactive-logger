@@ -73,6 +73,26 @@ export async function downloadLogs(
 
 const POSITION_STORAGE_KEY = "illogger-button-position";
 
+export interface ButtonStyleOptions {
+  background?: string;
+  color?: string;
+  padding?: string;
+  borderRadius?: string;
+  fontSize?: string;
+  border?: string;
+  cursor?: string;
+  zIndex?: string;
+  opacity?: string;
+  width?: string;
+  height?: string;
+  [key: string]: string | undefined; // Allow any CSS property
+}
+
+export interface ButtonOptions {
+  text?: string;
+  style?: ButtonStyleOptions;
+}
+
 function getSavedPosition(): { top: number; left: number } | null {
   if (typeof window === "undefined" || typeof localStorage === "undefined") {
     return null;
@@ -103,7 +123,8 @@ function savePosition(top: number, left: number) {
 export function injectDownloadButton(
   storage: StorageAdapter,
   singleFile = false,
-  showTimestamps: boolean | (() => boolean) = true
+  showTimestamps: boolean | (() => boolean) = true,
+  buttonOptions?: ButtonOptions
 ) {
   if (typeof document === "undefined") return; // skip for Node
   if (document.getElementById("illogger-download-btn")) return;
@@ -114,7 +135,7 @@ export function injectDownloadButton(
 
   const btn = document.createElement("button");
   btn.id = "illogger-download-btn";
-  btn.textContent = "iLogger";
+  btn.textContent = buttonOptions?.text ?? "iLogger";
   btn.draggable = false; // Prevent native HTML5 drag
 
   // Get saved position or use default
@@ -122,7 +143,8 @@ export function injectDownloadButton(
   const defaultTop = window.innerHeight - 60; // 20px from bottom + button height
   const defaultLeft = window.innerWidth - 100; // 20px from right + button width
 
-  Object.assign(btn.style, {
+  // Default styles
+  const defaultStyles: Record<string, string> = {
     position: "fixed",
     top: savedPosition ? `${savedPosition.top}px` : `${defaultTop}px`,
     left: savedPosition ? `${savedPosition.left}px` : `${defaultLeft}px`,
@@ -142,7 +164,11 @@ export function injectDownloadButton(
     WebkitUserSelect: "none",
     MozUserSelect: "none",
     msUserSelect: "none",
-  });
+  };
+
+  // Merge custom styles with defaults
+  const mergedStyles = { ...defaultStyles, ...(buttonOptions?.style || {}) };
+  Object.assign(btn.style, mergedStyles);
 
   btn.onmouseenter = () => {
     if (!btn.dataset.dragging) {

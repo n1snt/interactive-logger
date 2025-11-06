@@ -1,6 +1,6 @@
 import { LoggerInstance } from "./loggerInstance";
 import { StorageAdapter } from "./storageAdapter";
-import { downloadLogs, injectDownloadButton, withdrawDownloadButton } from "./uiButton";
+import { downloadLogs, injectDownloadButton, withdrawDownloadButton, type ButtonOptions } from "./uiButton";
 
 class ILoggerCore {
   private instances: Record<string, LoggerInstance> = {};
@@ -12,6 +12,7 @@ class ILoggerCore {
   private consoleInterceptionEnabled = false;
   private sessionSeparatorEnabled = true;
   private sessionSeparatorMessage: string | undefined;
+  private buttonOptions: ButtonOptions | undefined;
   private originalConsoleMethods: {
     log?: typeof console.log;
     error?: typeof console.error;
@@ -21,13 +22,14 @@ class ILoggerCore {
     trace?: typeof console.trace;
   } = {};
 
-  constructor(options: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string } = {}) {
+  constructor(options: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string; buttonOptions?: ButtonOptions } = {}) {
     this.storage = new StorageAdapter("__illogger__", options.maxLogs ?? 5000);
     this.singleFile = options.singleFile ?? false;
     this.timestampsEnabled = options.timestamps ?? true;
     this.enabled = options.enabled ?? true;
     this.sessionSeparatorEnabled = options.sessionSeparator ?? true;
     this.sessionSeparatorMessage = options.sessionSeparatorMessage;
+    this.buttonOptions = options.buttonOptions;
 
     // Check if this is a new session and add separator if enabled
     if (this.sessionSeparatorEnabled && this.enabled && typeof window !== "undefined" && typeof sessionStorage !== "undefined") {
@@ -74,8 +76,10 @@ class ILoggerCore {
     return this.enabled;
   }
 
-  injectButton() {
-    injectDownloadButton(this.storage, this.singleFile, () => this.timestampsEnabled);
+  injectButton(buttonOptions?: ButtonOptions) {
+    // Use provided options or fall back to constructor options
+    const options = buttonOptions ?? this.buttonOptions;
+    injectDownloadButton(this.storage, this.singleFile, () => this.timestampsEnabled, options);
   }
 
   withdrawButton() {
@@ -271,7 +275,7 @@ class ILoggerCore {
 
 let _illogger: ILoggerCore | null = null;
 
-export function ILogger(options?: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string }) {
+export function ILogger(options?: { maxLogs?: number; singleFile?: boolean; timestamps?: boolean; enabled?: boolean; sessionSeparator?: boolean; sessionSeparatorMessage?: string; buttonOptions?: ButtonOptions }) {
   if (!_illogger) _illogger = new ILoggerCore(options);
   return _illogger;
 }
