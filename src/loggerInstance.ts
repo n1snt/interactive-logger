@@ -6,9 +6,17 @@ export class LoggerInstance {
     private storage: StorageAdapter,
     private withTimestamps = true,
     private consoleLogging = false,
+    private enabled = true,
   ) { }
 
   writeLog(...args: any[]) {
+    // If logger is disabled, don't write to storage
+    if (!this.enabled) {
+      // Still allow console logging if enabled (for debugging)
+      if (this.consoleLogging) console.log(`[${this.name}]`, ...args);
+      return;
+    }
+
     const message = args
       .map((a) =>
         typeof a === "string"
@@ -38,5 +46,9 @@ export class LoggerInstance {
 
   setTimestamps(enabled: boolean) {
     this.withTimestamps = enabled;
+  }
+
+  setEnabled(enabled: boolean) {
+    this.enabled = enabled;
   }
 }
