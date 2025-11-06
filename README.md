@@ -513,7 +513,7 @@ Compatible with:
 
 ## License
 
-MIT
+Attribution-NonCommercial 4.0 International
 
 ## Author
 
