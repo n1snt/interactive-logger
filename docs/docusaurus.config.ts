@@ -22,8 +22,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'nishant', // Usually your GitHub org/user name.
-  projectName: 'ilogger', // Usually your repo name.
+  organizationName: 'n1snt', // Usually your GitHub org/user name.
+  projectName: 'interactive-logger', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +44,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/nishant/ilogger/tree/main/docs/',
+            'https://github.com/n1snt/interactive-logger/tree/main/docs/',
         },
         blog: false, // Disable blog for now
         theme: {
@@ -62,10 +62,6 @@ const config: Config = {
     },
     navbar: {
       title: 'Interactive Logger',
-      logo: {
-        alt: 'Interactive Logger Logo',
-        src: 'img/logo.svg',
-      },
       items: [
         {
           type: 'docSidebar',
@@ -74,7 +70,19 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          href: 'https://github.com/nishant/ilogger',
+          type: 'doc',
+          docId: 'faq',
+          position: 'left',
+          label: 'FAQ',
+        },
+        {
+          type: 'doc',
+          docId: 'api-reference/interactive-logger',
+          position: 'left',
+          label: 'API Reference',
+        },
+        {
+          href: 'https://github.com/n1snt/interactive-logger',
           label: 'GitHub',
           position: 'right',
         },
@@ -82,27 +90,7 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Documentation',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/nishant/ilogger',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} Interactive Logger. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Nishant Bhandari.`,
     },
     prism: {
       theme: prismThemes.github,
