@@ -1,8 +1,0 @@
----
-alwaysApply: true
----
-# TypeScript Enforcement
-
-When creating a new file, it MUST be in TypeScript:
-- Use `.ts` for non-React logic files
-- Never create `.js` or `.jsx` files for new code
