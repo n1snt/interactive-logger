@@ -1,1 +1,4 @@
-npm test -- --run
+# Only run tests if there are changes in src directory
+if git diff --cached --name-only --diff-filter=ACM | grep -q "^src/"; then
+  npm test -- --run
+fi
