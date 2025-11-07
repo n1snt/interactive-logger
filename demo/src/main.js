@@ -1,7 +1,11 @@
 import { InteractiveLogger, getLogger } from "interactive-logger";
 
 // Initialize Interactive Logger
-const logger = InteractiveLogger({ maxLogs: 500 });
+const logger = InteractiveLogger({
+    maxLogs: 500, buttonOptions: {
+        text: "iLogger"
+    }
+});
 // Don't auto-inject button - let user control it via UI
 logger.injectButton();
 // Enable console interface
