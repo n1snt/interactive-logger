@@ -13,7 +13,7 @@ interface Session {
     startTime: Date | null;
     endTime: Date | null;
     entryCount: number;
-    loggerNames: string[];
+    loggerNames: Set<string> | string[];
 }
 
 export function SessionsList({ logs }: SessionsListProps) {
@@ -37,7 +37,7 @@ export function SessionsList({ logs }: SessionsListProps) {
                     startTime: entry.timestamp,
                     endTime: entry.timestamp,
                     entryCount: 0,
-                    loggerNames: new Set<string>(),
+                    loggerNames: new Set<string>() as Set<string>,
                 };
             } else {
                 // First entry - create session if needed
@@ -48,21 +48,23 @@ export function SessionsList({ logs }: SessionsListProps) {
                         startTime: entry.timestamp,
                         endTime: entry.timestamp,
                         entryCount: 0,
-                        loggerNames: new Set<string>(),
+                        loggerNames: new Set<string>() as Set<string>,
                     };
                 }
 
                 // Update session info
-                currentSession.entryCount++;
-                if (entry.loggerName) {
-                    (currentSession.loggerNames as any).add(entry.loggerName);
-                }
-                if (entry.timestamp) {
-                    if (!currentSession.startTime || entry.timestamp < currentSession.startTime) {
-                        currentSession.startTime = entry.timestamp;
+                if (currentSession) {
+                    currentSession.entryCount++;
+                    if (entry.loggerName) {
+                        (currentSession.loggerNames as Set<string>).add(entry.loggerName);
                     }
-                    if (!currentSession.endTime || entry.timestamp > currentSession.endTime) {
-                        currentSession.endTime = entry.timestamp;
+                    if (entry.timestamp) {
+                        if (!currentSession.startTime || entry.timestamp < currentSession.startTime) {
+                            currentSession.startTime = entry.timestamp;
+                        }
+                        if (!currentSession.endTime || entry.timestamp > currentSession.endTime) {
+                            currentSession.endTime = entry.timestamp;
+                        }
                     }
                 }
             }

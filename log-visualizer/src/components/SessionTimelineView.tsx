@@ -41,7 +41,7 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
         });
 
         // Sort entries within each logger by timestamp
-        grouped.forEach((entries, loggerName) => {
+        grouped.forEach((entries) => {
             entries.sort((a, b) => {
                 if (!a.timestamp && !b.timestamp) return 0;
                 if (!a.timestamp) return 1;
@@ -71,7 +71,7 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
 
     // Build global timestamp position map for alignment across all loggers
     // Also track max stack height per timestamp
-    const { globalTimestampPositions, maxStackHeights, totalHeight } = useMemo(() => {
+    const { globalTimestampPositions, totalHeight } = useMemo(() => {
         const positions = new Map<number, number>();
         const stackHeights = new Map<number, number>();
         const allTimestamps = new Set<number>();
@@ -135,7 +135,6 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
 
         return {
             globalTimestampPositions: positions,
-            maxStackHeights: stackHeights,
             totalHeight: Math.max(height + bottomPadding, 100)
         };
     }, [entriesByLogger]);
