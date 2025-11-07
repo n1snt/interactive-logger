@@ -12,6 +12,7 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
     const [selectedLoggers, setSelectedLoggers] = useState<Set<string>>(
         new Set(loggerNames)
     );
+    const [pinnedHeaders, setPinnedHeaders] = useState<boolean>(true);
 
     // Filter entries by selected loggers
     const filteredEntries = entries.filter(e => {
@@ -210,6 +211,15 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
 
     return (
         <div className="session-timeline-view">
+            <div className="timeline-header-actions">
+                <button
+                    className={`pin-headers-toggle ${pinnedHeaders ? 'active' : ''}`}
+                    onClick={() => setPinnedHeaders(!pinnedHeaders)}
+                    title={pinnedHeaders ? 'Unpin column headers' : 'Pin column headers'}
+                >
+                    📌 {pinnedHeaders ? 'Pinned' : 'Pin Headers'}
+                </button>
+            </div>
             <div className="timeline-controls">
                 <div className="logger-selector">
                     <h3>Loggers</h3>
@@ -242,7 +252,6 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
                     </div>
                 </div>
 
-
                 <div className="time-range-info">
                     <div>Start: {timeRange.start ? formatTime(timeRange.start) : 'N/A'}</div>
                     <div>End: {timeRange.end ? formatTime(timeRange.end) : 'N/A'}</div>
@@ -264,7 +273,7 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
 
                             return (
                                 <div key={loggerName} className="timeline-column" data-column-index={index}>
-                                    <div className="timeline-column-header">
+                                    <div className={`timeline-column-header ${pinnedHeaders ? 'pinned' : ''}`}>
                                         <span className="logger-name">{loggerName}</span>
                                         <span className="entry-count-badge">{loggerEntries.length}</span>
                                     </div>
