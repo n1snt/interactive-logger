@@ -1,0 +1,243 @@
+.session-detail {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px);
+}
+
+.session-detail-header {
+    margin-bottom: 30px;
+}
+
+.back-link {
+    display: inline-block;
+    color: #4a9eff;
+    text-decoration: none;
+    margin-bottom: 15px;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #6ab4ff;
+    text-decoration: underline;
+}
+
+.session-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.session-title h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #4a9eff;
+}
+
+.session-entry-count {
+    background: #4a9eff;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.session-not-found {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.session-not-found h2 {
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.view-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #444;
+}
+
+.tab-button {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+}
+
+.tab-button:hover {
+    color: #e0e0e0;
+    background: #2a2a2a;
+}
+
+.tab-button.active {
+    color: #4a9eff;
+    border-bottom-color: #4a9eff;
+    background: #2a2a2a;
+}
+
+.session-controls {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.logger-selector h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #e0e0e0;
+}
+
+.logger-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logger-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    color: #e0e0e0;
+}
+
+.logger-checkbox input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.no-entries-hint {
+    color: #666;
+    font-size: 11px;
+    font-style: italic;
+}
+
+.session-logs {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.logger-section {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.logger-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #333;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.logger-section-header:hover {
+    background: #3a3a3a;
+}
+
+.logger-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.collapse-icon {
+    color: #888;
+    font-size: 12px;
+    width: 16px;
+    display: inline-block;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.logger-section-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #4a9eff;
+}
+
+.entry-count {
+    background: #444;
+    color: #aaa;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.logger-entries {
+    padding: 10px;
+}
+
+.log-entry {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: #1e1e1e;
+    border-left: 3px solid #4a9eff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: background 0.2s;
+}
+
+.log-entry:hover {
+    background: #252525;
+}
+
+.log-entry.separator {
+    background: #3a2a2a;
+    border-left-color: #ff6a4a;
+    font-weight: 600;
+}
+
+.log-entry-time {
+    font-size: 11px;
+    color: #888;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.log-entry-message {
+    font-size: 13px;
+    color: #e0e0e0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+/* Scrollbar styling */
+.logger-entries::-webkit-scrollbar {
+    width: 8px;
+}
+
+.logger-entries::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.logger-entries::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+.logger-entries::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

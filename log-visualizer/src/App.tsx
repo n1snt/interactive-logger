@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { FileUpload } from './components/FileUpload';
-import { LogVisualizer } from './components/LogVisualizer';
+import { SessionDetail } from './components/SessionDetail';
+import { SessionsList } from './components/SessionsList';
 import type { ParsedLogs } from './utils/logParser';
 
 function App() {
@@ -16,26 +18,51 @@ function App() {
     };
 
     return (
-        <div className="app">
-            {parsedLogs ? (
-                <div className="app-with-visualizer">
-                    <div className="app-header">
-                        <h1>iLogger Visualizer</h1>
+        <BrowserRouter>
+            <div className="app">
+                <div className="app-header">
+                    <h1>iLogger Visualizer</h1>
+                    {parsedLogs && (
                         <button onClick={handleReset} className="reset-button">
                             Upload New File
                         </button>
-                    </div>
-                    <LogVisualizer logs={parsedLogs} />
+                    )}
                 </div>
-            ) : (
-                <div className="app-with-upload">
-                    <div className="app-header">
-                        <h1>iLogger Visualizer</h1>
-                    </div>
-                    <FileUpload onLogsParsed={handleLogsParsed} />
-                </div>
-            )}
-        </div>
+
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            parsedLogs ? (
+                                <Navigate to="/sessions" replace />
+                            ) : (
+                                <FileUpload onLogsParsed={handleLogsParsed} />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/sessions"
+                        element={
+                            parsedLogs ? (
+                                <SessionsList logs={parsedLogs} />
+                            ) : (
+                                <Navigate to="/" replace />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/sessions/:sessionId"
+                        element={
+                            parsedLogs ? (
+                                <SessionDetail logs={parsedLogs} />
+                            ) : (
+                                <Navigate to="/" replace />
+                            )
+                        }
+                    />
+                </Routes>
+            </div>
+        </BrowserRouter>
     );
 }
 

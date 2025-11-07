@@ -160,7 +160,13 @@ export async function parseLogsFromZip(file: File): Promise<ParsedLogs> {
 
         // Extract logger name from filename (remove .log extension and path)
         const baseFilename = filename.split('/').pop() || filename;
-        const loggerName = baseFilename.replace(/\.log$/, '');
+        let loggerName = baseFilename.replace(/\.log$/, '').trim();
+
+        // Normalize logger name (handle case variations)
+        // Keep original case but also track variations
+        if (loggerName === '') {
+            loggerName = 'unknown';
+        }
 
         // Read file content
         const content = await zipEntry.async('text');
