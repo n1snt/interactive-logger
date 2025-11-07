@@ -139,6 +139,48 @@
     overflow: hidden;
 }
 
+/* Different border colors for each logger section */
+.logger-section[data-logger-index="0"] {
+    border-left: 3px solid #4a9eff;
+}
+
+.logger-section[data-logger-index="1"] {
+    border-left: 3px solid #ff6a4a;
+}
+
+.logger-section[data-logger-index="2"] {
+    border-left: 3px solid #4ade80;
+}
+
+.logger-section[data-logger-index="3"] {
+    border-left: 3px solid #ffaa4a;
+}
+
+.logger-section[data-logger-index="4"] {
+    border-left: 3px solid #6a4aff;
+}
+
+.logger-section[data-logger-index="5"] {
+    border-left: 3px solid #4affff;
+}
+
+.logger-section[data-logger-index="6"] {
+    border-left: 3px solid #ff4aff;
+}
+
+.logger-section[data-logger-index="7"] {
+    border-left: 3px solid #ffff4a;
+}
+
+/* Cycle through colors for more than 8 loggers */
+.logger-section[data-logger-index="8"] {
+    border-left: 3px solid #4a9eff;
+}
+
+.logger-section[data-logger-index="9"] {
+    border-left: 3px solid #ff6a4a;
+}
+
 .logger-section-header {
     display: flex;
     justify-content: space-between;
@@ -170,18 +212,100 @@
     transition: transform 0.2s;
 }
 
-.logger-section-header h3 {
+.logger-section-header h3.logger-name {
     margin: 0;
     font-size: 18px;
+}
+
+/* Match logger name color to section color */
+.logger-section[data-logger-index="0"] .logger-name {
     color: #4a9eff;
 }
 
+.logger-section[data-logger-index="1"] .logger-name {
+    color: #ff6a4a;
+}
+
+.logger-section[data-logger-index="2"] .logger-name {
+    color: #4ade80;
+}
+
+.logger-section[data-logger-index="3"] .logger-name {
+    color: #ffaa4a;
+}
+
+.logger-section[data-logger-index="4"] .logger-name {
+    color: #6a4aff;
+}
+
+.logger-section[data-logger-index="5"] .logger-name {
+    color: #4affff;
+}
+
+.logger-section[data-logger-index="6"] .logger-name {
+    color: #ff4aff;
+}
+
+.logger-section[data-logger-index="7"] .logger-name {
+    color: #ffff4a;
+}
+
+.logger-section[data-logger-index="8"] .logger-name {
+    color: #4a9eff;
+}
+
+.logger-section[data-logger-index="9"] .logger-name {
+    color: #ff6a4a;
+}
+
 .entry-count {
-    background: #444;
-    color: #aaa;
+    color: white;
     padding: 4px 12px;
     border-radius: 12px;
     font-size: 12px;
+    font-weight: 600;
+}
+
+/* Match entry count badge color to section color */
+.logger-section[data-logger-index="0"] .entry-count {
+    background: #4a9eff;
+}
+
+.logger-section[data-logger-index="1"] .entry-count {
+    background: #ff6a4a;
+}
+
+.logger-section[data-logger-index="2"] .entry-count {
+    background: #4ade80;
+}
+
+.logger-section[data-logger-index="3"] .entry-count {
+    background: #ffaa4a;
+}
+
+.logger-section[data-logger-index="4"] .entry-count {
+    background: #6a4aff;
+}
+
+.logger-section[data-logger-index="5"] .entry-count {
+    background: #4affff;
+}
+
+.logger-section[data-logger-index="6"] .entry-count {
+    background: #ff4aff;
+}
+
+.logger-section[data-logger-index="7"] .entry-count {
+    background: #ffff4a;
+    color: #1a1a1a;
+}
+
+.logger-section[data-logger-index="8"] .entry-count {
+    background: #4a9eff;
+}
+
+.logger-section[data-logger-index="9"] .entry-count {
+    background: #ff6a4a;
 }
 
 .logger-entries {
@@ -200,8 +324,91 @@
     transition: background 0.2s;
 }
 
+/* Match entry border color to section color */
+.logger-section[data-logger-index="0"] .log-entry {
+    border-left-color: #4a9eff;
+}
+
+.logger-section[data-logger-index="1"] .log-entry {
+    border-left-color: #ff6a4a;
+}
+
+.logger-section[data-logger-index="2"] .log-entry {
+    border-left-color: #4ade80;
+}
+
+.logger-section[data-logger-index="3"] .log-entry {
+    border-left-color: #ffaa4a;
+}
+
+.logger-section[data-logger-index="4"] .log-entry {
+    border-left-color: #6a4aff;
+}
+
+.logger-section[data-logger-index="5"] .log-entry {
+    border-left-color: #4affff;
+}
+
+.logger-section[data-logger-index="6"] .log-entry {
+    border-left-color: #ff4aff;
+}
+
+.logger-section[data-logger-index="7"] .log-entry {
+    border-left-color: #ffff4a;
+}
+
+.logger-section[data-logger-index="8"] .log-entry {
+    border-left-color: #4a9eff;
+}
+
+.logger-section[data-logger-index="9"] .log-entry {
+    border-left-color: #ff6a4a;
+}
+
 .log-entry:hover {
     background: #252525;
+    transform: translateX(2px);
+}
+
+/* Hover effect maintains section color but brightens */
+.logger-section[data-logger-index="0"] .log-entry:hover {
+    border-left-color: #6ab4ff;
+}
+
+.logger-section[data-logger-index="1"] .log-entry:hover {
+    border-left-color: #ff8a6a;
+}
+
+.logger-section[data-logger-index="2"] .log-entry:hover {
+    border-left-color: #6ae89a;
+}
+
+.logger-section[data-logger-index="3"] .log-entry:hover {
+    border-left-color: #ffcc6a;
+}
+
+.logger-section[data-logger-index="4"] .log-entry:hover {
+    border-left-color: #8a6aff;
+}
+
+.logger-section[data-logger-index="5"] .log-entry:hover {
+    border-left-color: #6affff;
+}
+
+.logger-section[data-logger-index="6"] .log-entry:hover {
+    border-left-color: #ff6aff;
+}
+
+.logger-section[data-logger-index="7"] .log-entry:hover {
+    border-left-color: #ffff6a;
+}
+
+.logger-section[data-logger-index="8"] .log-entry:hover {
+    border-left-color: #6ab4ff;
+}
+
+.logger-section[data-logger-index="9"] .log-entry:hover {
+    border-left-color: #ff8a6a;
 }
 
 .log-entry.separator {

@@ -49,8 +49,24 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
             });
         });
 
-        return grouped;
-    }, [filteredEntries, selectedLoggers]);
+        // Create a sorted array of logger names based on loggerNames order
+        const sortedLoggerNames = Array.from(grouped.keys()).sort((a, b) => {
+            const indexA = loggerNames.findIndex(name => name.toLowerCase() === a.toLowerCase());
+            const indexB = loggerNames.findIndex(name => name.toLowerCase() === b.toLowerCase());
+            if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+        });
+
+        // Create a new Map with sorted order
+        const sortedGrouped = new Map<string, LogEntry[]>();
+        sortedLoggerNames.forEach(name => {
+            sortedGrouped.set(name, grouped.get(name)!);
+        });
+
+        return sortedGrouped;
+    }, [filteredEntries, selectedLoggers, loggerNames]);
 
     // Build global timestamp position map for alignment across all loggers
     // Also track max stack height per timestamp
@@ -224,11 +240,14 @@ export function SessionTimelineView({ entries, loggerNames, sessionStartTime }: 
             <div className="timeline-main">
                 <div className="timeline-columns-container">
                     <div className="timeline-columns-wrapper" style={{ height: totalHeight }}>
-                        {Array.from(entriesByLogger.entries()).map(([loggerName, loggerEntries]) => {
+                        {Array.from(entriesByLogger.entries()).map(([loggerName, loggerEntries], index) => {
                             const positions = calculatePositions(loggerEntries, globalTimestampPositions);
                             return (
-                                <div key={loggerName} className="timeline-column">
-                                    <div className="timeline-column-header">{loggerName}</div>
+                                <div key={loggerName} className="timeline-column" data-column-index={index}>
+                                    <div className="timeline-column-header">
+                                        <span className="logger-name">{loggerName}</span>
+                                        <span className="entry-count-badge">{loggerEntries.length}</span>
+                                    </div>
                                     <div className="timeline-column-content">
                                         {loggerEntries.map((entry, index) => {
                                             const position = positions.get(entry);

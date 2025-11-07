@@ -199,46 +199,56 @@ export function SessionDetail({ logs }: SessionDetailProps) {
                     </div>
 
                     <div className="session-logs">
-                        {Array.from(entriesByLogger.entries()).map(([loggerName, entries]) => {
-                            const isExpanded = expandedLoggers.has(loggerName);
-                            return (
-                                <div key={loggerName} className="logger-section">
-                                    <div
-                                        className="logger-section-header"
-                                        onClick={() => {
-                                            const newExpanded = new Set(expandedLoggers);
-                                            if (isExpanded) {
-                                                newExpanded.delete(loggerName);
-                                            } else {
-                                                newExpanded.add(loggerName);
-                                            }
-                                            setExpandedLoggers(newExpanded);
-                                        }}
-                                    >
-                                        <div className="logger-section-title">
-                                            <span className="collapse-icon">{isExpanded ? '▼' : '▶'}</span>
-                                            <h3>{loggerName}</h3>
+                        {Array.from(entriesByLogger.entries())
+                            .sort(([a], [b]) => {
+                                // Sort by the order they appear in logs.loggerNames to match timeline view
+                                const indexA = logs.loggerNames.findIndex(name => name.toLowerCase() === a.toLowerCase());
+                                const indexB = logs.loggerNames.findIndex(name => name.toLowerCase() === b.toLowerCase());
+                                if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+                                if (indexA === -1) return 1;
+                                if (indexB === -1) return -1;
+                                return indexA - indexB;
+                            })
+                            .map(([loggerName, entries], index) => {
+                                const isExpanded = expandedLoggers.has(loggerName);
+                                return (
+                                    <div key={loggerName} className="logger-section" data-logger-index={index}>
+                                        <div
+                                            className="logger-section-header"
+                                            onClick={() => {
+                                                const newExpanded = new Set(expandedLoggers);
+                                                if (isExpanded) {
+                                                    newExpanded.delete(loggerName);
+                                                } else {
+                                                    newExpanded.add(loggerName);
+                                                }
+                                                setExpandedLoggers(newExpanded);
+                                            }}
+                                        >
+                                            <div className="logger-section-title">
+                                                <span className="collapse-icon">{isExpanded ? '▼' : '▶'}</span>
+                                                <h3 className="logger-name">{loggerName}</h3>
+                                            </div>
+                                            <span className="entry-count">{entries.length} entries</span>
                                         </div>
-                                        <span className="entry-count">{entries.length} entries</span>
-                                    </div>
-                                    {isExpanded && (
-                                        <div className="logger-entries">
-                                            {entries.map((entry, index) => (
-                                                <div
-                                                    key={index}
-                                                    className={`log-entry ${entry.isSeparator ? 'separator' : ''}`}
-                                                >
-                                                    <div className="log-entry-time">
-                                                        {entry.timestamp ? formatTime(entry.timestamp) : 'No timestamp'}
+                                        {isExpanded && (
+                                            <div className="logger-entries">
+                                                {entries.map((entry, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={`log-entry ${entry.isSeparator ? 'separator' : ''}`}
+                                                    >
+                                                        <div className="log-entry-time">
+                                                            {entry.timestamp ? formatTime(entry.timestamp) : 'No timestamp'}
+                                                        </div>
+                                                        <div className="log-entry-message">{entry.message}</div>
                                                     </div>
-                                                    <div className="log-entry-message">{entry.message}</div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
                     </div>
                 </>
             ) : (
