@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+# Documentation Maintenance Rule
+
+**ALWAYS update the documentation in the `docs/docs/` directory** when making any of the following changes:
+- Adding new constructor options to `ILogger()` or new configuration parameters to any method
+- Adding, removing, or modifying any public method on `ILogger` instance, `LoggerInstance`, or global functions
+- Changing method signatures (parameters, return types) or behavior that affects users
+- Adding new features or capabilities that users can access
+- Changing how existing features work or their behavior
+- Adding or modifying exported types from `src/index.ts`
+- Changing default values of existing options
+
+Update the relevant sections in the documentation:
+- **API Reference**: Update or create individual API pages in `docs/docs/api-reference/` for each method
+- **Introduction**: Update `docs/docs/intro.md` for installation and quick start changes
+- **Core Concepts**: Update `docs/docs/core-concepts.md` for conceptual changes
+- **Examples**: Update `docs/docs/examples.md` for new usage examples
+- **FAQ**: Update `docs/docs/faq.md` if needed for new features or common questions
+
+**DO NOT update README.md** - it is intentionally kept minimal and points to the full documentation.
+
+**Exception**: For architectural changes (storage structure, database schema, major internal refactoring, or breaking changes), **ALWAYS update both**:
+- `docs/docs/architecture.md` - Update the architecture documentation
+- `README.md` - Update the README to reflect architectural changes that affect users
