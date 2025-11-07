@@ -66,7 +66,7 @@ logger.injectButton();
 
 For complete documentation, API reference, examples, and more, visit:
 
-**https://n1snt.github.io/interactive-logger/docs**
+**https://n1snt.github.io/interactive-logger/docs/intro**
 
 ## License
 
