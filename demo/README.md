@@ -2,6 +2,10 @@
 
 This is a demo project showcasing the features of **Interactive Logger** - an in-browser logger with persistent storage and downloadable logs.
 
+## 🚀 Live Demo
+
+Try the live demo: **[https://interactive-logger-demo.vercel.app/](https://interactive-logger-demo.vercel.app/)**
+
 ## Features Demonstrated
 
 - ✅ **Multiple Logger Instances**: Create and use different logger instances (app, api, ui, auth)
