@@ -1,0 +1,38 @@
+---
+alwaysApply: true
+---
+
+# Documentation Output Restriction
+
+When Cursor is discussing or explaining concepts (e.g., reasoning, planning, or answering questions), **it must not generate or save Markdown documentation files** (`.md`) unless explicitly requested.
+
+1. **If the user is asking for an explanation, idea, plan, or concept discussion:**
+   - Respond only within the conversation.
+   - Do **not** create `.md` files or documentation outputs automatically.
+
+2. **If the user explicitly asks for documentation output:**
+   - Only then generate `.md` files.
+   - Confirm the intended structure (README, guide, design doc, etc.) before writing.
+
+3. **When generating docs intentionally:**
+   - Ensure relevance — only summarize what’s finalized or confirmed.
+   - Use clear headings, concise explanations, and consistent formatting.
+
+4. **Prohibited behavior:**
+   - Auto-writing or suggesting `.md` files for general chat, brainstorming, or planning.
+   - Converting discussions or summaries into documentation without user request.
+
+---
+
+### Example
+
+If discussing:
+> “How should we structure our new API routes?”
+
+✅ Respond inline with explanations and options.
+❌ Do not auto-create `api-design.md` or similar files.
+
+If the user says:
+> “Write this up as a README.md”
+
+✅ Then and only then create the `.md` document.
